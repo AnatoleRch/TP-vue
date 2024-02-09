@@ -21,7 +21,25 @@
                     <td>{{ client.code }}</td>
                     <td>{{ client.societe }}</td>
                     <td>{{ client.contact }}</td>
-                    <td>{{ client.ville }}</td>
+                    <td>{{ client.adresse.ville }}</td>
+                </tr>
+                <tr>
+                    <th>
+                        <button @click="chargeDebut(0)">
+                            debut
+                        </button></th>
+                    <th>
+                        <button @click="chargePrecedant()">
+                            ←
+                        </button></th>
+                    <th>
+                        <button @click="chargeSuivant()">
+                            →
+                        </button></th>
+                    <th>
+                        <button @click="chargeFin()">
+                            fin
+                        </button></th>
                 </tr>
             </table>
         </div>
@@ -31,7 +49,7 @@
 <script setup>
 import { reactive, onMounted } from "vue";
 import { doAjaxRequest } from "@/api";
-
+let page = 0;
 // Pour réinitialiser le formulaire
 const clientVide = {
     libelle: "",
@@ -55,13 +73,47 @@ function chargeClients() {
     // Appel à l'API pour avoir la liste des Clients
     // Trié par code, descendant
     // Verbe HTTP GET par défaut
-    doAjaxRequest("/api/clients")
+    doAjaxRequest("/api/clients?size=5&page=0")
         .then((json) => {
             console.log(json)
             data.listeClients = json._embedded.clients;
         })
         .catch(showError);
 }
+
+function chargeFin() {
+    doAjaxRequest("/api/clients?size=5&page=17")
+        .then((json) => {
+            console.log(json)
+            data.listeClients = json._embedded.clients;
+        })
+        .catch(showError);
+}
+function chargeDebut() {
+    doAjaxRequest("/api/clients?size=5&page=0")
+        .then((json) => {
+            console.log(json)
+            data.listeClients = json._embedded.clients;
+        })
+        .catch(showError);
+}
+function chargeSuivant() {
+    doAjaxRequest("/api/clients?size=5&page="+page+1)
+        .then((json) => {
+            console.log(json)
+            data.listeClients = json._embedded.clients;
+        })
+        .catch(showError);
+}
+function chargePrecedant() {
+    doAjaxRequest("/api/clients?size=5&page="+page-1)
+        .then((json) => {
+            console.log(json)
+            data.listeClients = json._embedded.clients;
+        })
+        .catch(showError);
+}
+
 
 function ajouteClient() {
     // Ajouter une Client avec les données du formulaire
