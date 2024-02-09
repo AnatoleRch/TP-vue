@@ -50,6 +50,7 @@
 import { reactive, onMounted } from "vue";
 import { doAjaxRequest } from "@/api";
 let page = 0;
+let totalpage=0
 // Pour réinitialiser le formulaire
 const clientVide = {
     libelle: "",
@@ -77,15 +78,20 @@ function chargeClients() {
         .then((json) => {
             console.log(json)
             data.listeClients = json._embedded.clients;
+            totalpage=json.page.totalPages
+            page = json.page.number
+
         })
         .catch(showError);
 }
 //json.page.number
 function chargeFin() {
-    doAjaxRequest("/api/clients?size=5&page=17")
+    doAjaxRequest("/api/clients?size=5&page="+totalpage)
         .then((json) => {
             console.log(json)
             data.listeClients = json._embedded.clients;
+            page = json.page.number
+
         })
         .catch(showError);
 }
@@ -94,22 +100,29 @@ function chargeDebut() {
         .then((json) => {
             console.log(json)
             data.listeClients = json._embedded.clients;
+            page = json.page.number
+
         })
         .catch(showError);
 }
 function chargeSuivant() {
-    doAjaxRequest("/api/clients?size=5&page="+page+1)
+    page=page+1
+    doAjaxRequest("/api/clients?size=5&page="+page)
         .then((json) => {
             console.log(json)
             data.listeClients = json._embedded.clients;
+            page = json.page.number
         })
         .catch(showError);
 }
 function chargePrecedant() {
-    doAjaxRequest("/api/clients?size=5&page="+page-1)
+    page=page-1
+    doAjaxRequest("/api/clients?size=5&page="+page)
         .then((json) => {
             console.log(json)
             data.listeClients = json._embedded.clients;
+            page = json.page.number
+
         })
         .catch(showError);
 }
