@@ -106,6 +106,7 @@ function chargeDebut() {
         .catch(showError);
 }
 function chargeSuivant() {
+    if (page<totalpage){
     page=page+1
     doAjaxRequest("/api/clients?size=5&page="+page)
         .then((json) => {
@@ -114,17 +115,19 @@ function chargeSuivant() {
             page = json.page.number
         })
         .catch(showError);
+    }
 }
 function chargePrecedant() {
+    if (page>0){
     page=page-1
     doAjaxRequest("/api/clients?size=5&page="+page)
         .then((json) => {
             console.log(json)
             data.listeClients = json._embedded.clients;
             page = json.page.number
-
         })
         .catch(showError);
+    }
 }
 
 
