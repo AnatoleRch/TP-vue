@@ -80,7 +80,7 @@ function chargeClients() {
         })
         .catch(showError);
 }
-
+//json.page.number
 function chargeFin() {
     doAjaxRequest("/api/clients?size=5&page=17")
         .then((json) => {
